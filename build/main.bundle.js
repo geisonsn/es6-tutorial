@@ -42,11 +42,46 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var calculateMonthlyPayment = function calculateMonthlyPayment(principal, years, rate) {
+	var _mortgage = __webpack_require__(1);
+	
+	var mortgage = _interopRequireWildcard(_mortgage);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	document.getElementById('calcBtn').addEventListener('click', function () {
+	    var principal = document.getElementById("principal").value;
+	    var years = document.getElementById("years").value;
+	    var rate = document.getElementById("rate").value;
+	
+	    var _mortgage$calculateAm = mortgage.calculateAmortization(principal, years, rate);
+	
+	    var monthlyPayment = _mortgage$calculateAm.monthlyPayment;
+	    var monthlyRate = _mortgage$calculateAm.monthlyRate;
+	    var amortization = _mortgage$calculateAm.amortization;
+	
+	    document.getElementById("monthlyPayment").innerHTML = monthlyPayment.toFixed(2);
+	    document.getElementById("monthlyRate").innerHTML = (monthlyRate * 100).toFixed(2);
+	    var html = "";
+	    amortization.forEach(function (year, index) {
+	        return html += '\n        <tr>\n            <td>' + (index + 1) + '</td>\n            <td class="currency">' + Math.round(year.principalY) + '</td>\n            <td class="stretch">\n                <div class="flex">\n                    <div class="bar principal"\n                        style="flex:' + year.principalY + ';-webkit-flex:' + year.principalY + '">\n                    </div>\n                    <div class="bar interest" \n                        style="flex:' + year.interestY + ';-webkit-flex:' + year.interestY + '">\n                    </div>\n                </div>\n            </td>\n            <td class="currency left">' + Math.round(year.interestY) + '</td>\n            <td class="currenty">' + Math.round(year.balance) + '</td>\n    ';
+	    });
+	    document.getElementById("amortization").innerHTML = html;
+	});
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var calculateMonthlyPayment = exports.calculateMonthlyPayment = function calculateMonthlyPayment(principal, years, rate) {
 	    var monthlyRate = 0;
 	    if (rate) {
 	        monthlyRate = rate / 100 / 12;
@@ -55,7 +90,7 @@
 	    return { principal: principal, years: years, rate: rate, monthlyPayment: monthlyPayment, monthlyRate: monthlyRate };
 	};
 	
-	var calculateAmortization = function calculateAmortization(principal, years, rate) {
+	var calculateAmortization = exports.calculateAmortization = function calculateAmortization(principal, years, rate) {
 	    var _calculateMonthlyPaym = calculateMonthlyPayment(principal, years, rate);
 	
 	    var monthlyRate = _calculateMonthlyPaym.monthlyRate;
@@ -77,25 +112,6 @@
 	    }
 	    return { monthlyPayment: monthlyPayment, monthlyRate: monthlyRate, amortization: amortization };
 	};
-	document.getElementById('calcBtn').addEventListener('click', function () {
-	    var principal = document.getElementById("principal").value;
-	    var years = document.getElementById("years").value;
-	    var rate = document.getElementById("rate").value;
-	
-	    var _calculateAmortizatio = calculateAmortization(principal, years, rate);
-	
-	    var monthlyPayment = _calculateAmortizatio.monthlyPayment;
-	    var monthlyRate = _calculateAmortizatio.monthlyRate;
-	    var amortization = _calculateAmortizatio.amortization;
-	
-	    document.getElementById("monthlyPayment").innerHTML = monthlyPayment.toFixed(2);
-	    document.getElementById("monthlyRate").innerHTML = (monthlyRate * 100).toFixed(2);
-	    var html = "";
-	    amortization.forEach(function (year, index) {
-	        return html += '\n        <tr>\n            <td>' + (index + 1) + '</td>\n            <td class="currency">' + Math.round(year.principalY) + '</td>\n            <td class="stretch">\n                <div class="flex">\n                    <div class="bar principal"\n                        style="flex:' + year.principalY + ';-webkit-flex:' + year.principalY + '">\n                    </div>\n                    <div class="bar interest" \n                        style="flex:' + year.interestY + ';-webkit-flex:' + year.interestY + '">\n                    </div>\n                </div>\n            </td>\n            <td class="currency left">' + Math.round(year.interestY) + '</td>\n            <td class="currenty">' + Math.round(year.balance) + '</td>\n    ';
-	    });
-	    document.getElementById("amortization").innerHTML = html;
-	});
 
 /***/ }
 /******/ ]);
